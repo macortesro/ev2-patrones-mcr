@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+				 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				 xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm https://jakarta.ee/xml/ns/persistence/orm/orm_3_1.xsd"
+				 version="3.1">
+	
+	
+	<!-- MODULO: BODEGAJE -->
+	<entity class="cl.patrones.taller.u2.bodegaje.domain.Bodega">
+		<table name="bod_bodegas" />
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>			
+			<one-to-many name="inventario" mapped-by="bodega" />
+		</attributes>
+	</entity>
+	
+	<entity class="cl.patrones.taller.u2.bodegaje.domain.Producto">
+		<table name="bod_productos" />
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="sku">
+				<column unique="true" nullable="false" />
+			</basic>
+			<one-to-many name="stocks" mapped-by="producto" />
+		</attributes>
+	</entity>
+	
+	<entity class="cl.patrones.taller.u2.bodegaje.domain.Stock">
+		<table name="bod_stock">
+			<unique-constraint>
+				<column-name>producto_id</column-name>
+				<column-name>bodega_id</column-name>
+			</unique-constraint>
+		</table>
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<many-to-one name="bodega"></many-to-one>
+			<many-to-one name="producto"></many-to-one>
+		</attributes>
+	</entity>
+	
+	<!-- MODULO: CATALOGO -->
+	<entity class="cl.patrones.taller.u2.catalogo.domain.Categoria">
+		<table name="cat_categorias" />
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<many-to-one name="padre" />
+		</attributes>
+	</entity>
+	
+	<entity class="cl.patrones.taller.u2.catalogo.domain.Clasificacion">
+		<table name="cat_clasificacion">
+			<unique-constraint>
+				<column-name>sku</column-name>
+				<column-name>categoria_id</column-name>
+			</unique-constraint>
+		</table>
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<many-to-one name="categoria" />
+		</attributes>			
+	</entity>
+	
+	<!-- MODULO: CLIENTES -->
+	<entity class="cl.patrones.taller.u2.clientes.Cliente">
+		<table name="cli_clientes" />
+		<attributes>
+			<id name="id">
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="email">
+				<column unique="true" />
+			</basic>			
+		</attributes>
+	</entity>
+	
+</entity-mappings>
